@@ -1,0 +1,68 @@
+[
+  {
+    "id": "1",
+    "title": "The Future of AI in Healthcare: Revolutionizing Diagnosis",
+    "description": "Artificial Intelligence is making waves in the medical field, with new algorithms capable of detecting diseases earlier than ever before.",
+    "content": "Lorem ipsum dolor sit amet...",
+    "urlToImage": "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=800&q=80",
+    "author": "Dr. Sarah Smith",
+    "publishedAt": "2023-10-25T10:00:00Z",
+    "source": { "id": "techcrunch", "name": "TechCrunch" },
+    "category": "Health"
+  },
+  {
+    "id": "2",
+    "title": "SpaceX Launches New Satellite Constellation",
+    "description": "SpaceX has successfully deployed another batch of Starlink satellites, aiming to provide global internet coverage.",
+    "content": "Lorem ipsum dolor sit amet...",
+    "urlToImage": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80",
+    "author": "Elon Musk Fan",
+    "publishedAt": "2023-10-24T14:30:00Z",
+    "source": { "id": "space-news", "name": "Space News" },
+    "category": "Science"
+  },
+  {
+    "id": "3",
+    "title": "Global Markets Rally Amid Economic Optimism",
+    "description": "Stock markets around the world saw significant gains today as investors reacted positively to the latest economic data.",
+    "content": "Lorem ipsum dolor sit amet...",
+    "urlToImage": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80",
+    "author": "Jane Doe",
+    "publishedAt": "2023-10-23T09:15:00Z",
+    "source": { "id": "bloomberg", "name": "Bloomberg" },
+    "category": "Business"
+  },
+  {
+    "id": "4",
+    "title": "New Framework for Web Development Released",
+    "description": "A popular JavaScript framework has just released its latest version, promising faster rendering times and better developer experience.",
+    "content": "Lorem ipsum dolor sit amet...",
+    "urlToImage": "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=800&q=80",
+    "author": "Dev Guru",
+    "publishedAt": "2023-10-22T16:45:00Z",
+    "source": { "id": "the-verge", "name": "The Verge" },
+    "category": "Technology"
+  },
+  {
+    "id": "5",
+    "title": "Championship Finals: A Match for the History Books",
+    "description": "Last night's game will be remembered as one of the greatest comebacks in sports history.",
+    "content": "Lorem ipsum dolor sit amet...",
+    "urlToImage": "https://images.unsplash.com/photo-1471295253337-3ceaaedca402?w=800&q=80",
+    "author": "Sports Analyst",
+    "publishedAt": "2023-10-21T20:00:00Z",
+    "source": { "id": "espn", "name": "ESPN" },
+    "category": "Sports"
+  },
+  {
+    "id": "6",
+    "title": "Award-Winning Movie Premieres This Weekend",
+    "description": "The highly anticipated film by the acclaimed director is set to hit theaters worldwide.",
+    "content": "Lorem ipsum dolor sit amet...",
+    "urlToImage": "https://images.unsplash.com/photo-1499364615650-ec38552f4f34?w=800&q=80",
+    "author": "Movie Buff",
+    "publishedAt": "2023-10-20T18:30:00Z",
+    "source": { "id": "variety", "name": "Variety" },
+    "category": "Entertainment"
+  }
+]
