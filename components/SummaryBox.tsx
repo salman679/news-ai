@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Sparkles, Loader2, ChevronDown, ChevronUp } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { generateAISummary } from "@/lib/ai-service";
 
 interface SummaryBoxProps {
   content: string;
@@ -19,20 +20,19 @@ export function SummaryBox({ content }: SummaryBoxProps) {
   const generateSummary = async () => {
     setLoading(true);
     setError(null);
+    setSummary(null);
+
     try {
-      const response = await fetch("/api/summary", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: content }),
-      });
-
-      if (!response.ok) throw new Error("Failed to generate summary");
-
-      const data = await response.json();
-      setSummary(data.summary);
+      const summaryText = await generateAISummary(content);
+      setSummary(summaryText);
       setIsExpanded(true);
-    } catch {
-      setError("Could not generate summary. Please try again.");
+    } catch (err) {
+      console.error("Summary generation failed:", err);
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Could not generate summary. Please try again."
+      );
     } finally {
       setLoading(false);
     }
