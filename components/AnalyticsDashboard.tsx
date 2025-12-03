@@ -18,7 +18,14 @@ import {
   YAxis,
 } from "recharts";
 import { useMemo } from "react";
-import { FileText, List, Globe } from "lucide-react";
+import { FileText, Globe, TrendingUp, Calendar, BarChart3 } from "lucide-react";
+import {
+  format,
+  parseISO,
+  subDays,
+  startOfDay,
+  differenceInDays,
+} from "date-fns";
 
 interface AnalyticsDashboardProps {
   articles: Article[];
@@ -40,6 +47,15 @@ export function AnalyticsDashboard({ articles }: AnalyticsDashboardProps) {
   const uniqueCategories = new Set(articles.map((a) => a.category)).size;
   const uniqueSources = new Set(articles.map((a) => a.source.name)).size;
 
+  // Calculate recent articles (last 7 days)
+  const now = new Date();
+  const sevenDaysAgo = subDays(now, 7);
+  const recentArticles = articles.filter(
+    (article) => parseISO(article.publishedAt) >= sevenDaysAgo
+  );
+  const recentGrowth =
+    articles.length > 0 ? (recentArticles.length / articles.length) * 100 : 0;
+
   const categoryData = useMemo(() => {
     const counts: Record<string, number> = {};
     articles.forEach((a) => {
@@ -59,22 +75,37 @@ export function AnalyticsDashboard({ articles }: AnalyticsDashboardProps) {
       .slice(0, 5);
   }, [articles]);
 
-  // Mock trend data (since we don't have real historical data per day in the mock)
+  // Real trend data based on actual article publication dates
   const trendData = useMemo(() => {
-    return [
-      { name: "Mon", articles: 4 },
-      { name: "Tue", articles: 3 },
-      { name: "Wed", articles: 7 },
-      { name: "Thu", articles: 5 },
-      { name: "Fri", articles: 8 },
-      { name: "Sat", articles: 6 },
-      { name: "Sun", articles: totalArticles > 10 ? totalArticles - 20 : 9 },
-    ];
-  }, [totalArticles]);
+    const days: Record<string, number> = {};
+    const now = new Date();
+
+    // Initialize last 7 days
+    for (let i = 6; i >= 0; i--) {
+      const date = startOfDay(subDays(now, i));
+      const dayKey = format(date, "MMM dd");
+      days[dayKey] = 0;
+    }
+
+    // Count articles by day
+    articles.forEach((article) => {
+      const articleDate = parseISO(article.publishedAt);
+      const daysSince = differenceInDays(now, articleDate);
+
+      if (daysSince >= 0 && daysSince <= 6) {
+        const dayKey = format(startOfDay(subDays(now, daysSince)), "MMM dd");
+        if (days[dayKey] !== undefined) {
+          days[dayKey]++;
+        }
+      }
+    });
+
+    return Object.entries(days).map(([name, articles]) => ({ name, articles }));
+  }, [articles]);
 
   return (
     <div className="space-y-8">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
@@ -84,22 +115,32 @@ export function AnalyticsDashboard({ articles }: AnalyticsDashboardProps) {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{totalArticles}</div>
-            <p className="text-xs text-muted-foreground">
-              +20.1% from last month
-            </p>
+            <p className="text-xs text-muted-foreground">Published articles</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Active Categories
+              Recent Activity
             </CardTitle>
-            <List className="h-4 w-4 text-muted-foreground" />
+            <TrendingUp className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{recentArticles.length}</div>
+            <p className="text-xs text-muted-foreground">
+              Last 7 days ({recentGrowth.toFixed(1)}% of total)
+            </p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Categories</CardTitle>
+            <BarChart3 className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{uniqueCategories}</div>
             <p className="text-xs text-muted-foreground">
-              Across {uniqueSources} sources
+              {uniqueSources} unique sources
             </p>
           </CardContent>
         </Card>
@@ -195,7 +236,10 @@ export function AnalyticsDashboard({ articles }: AnalyticsDashboardProps) {
 
         <Card className="col-span-1 lg:col-span-2">
           <CardHeader>
-            <CardTitle>Trend Over Time (Last 7 Days)</CardTitle>
+            <CardTitle className="flex items-center gap-2">
+              <Calendar className="h-5 w-5" />
+              Publishing Timeline (Last 7 Days)
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="h-[300px] w-full">

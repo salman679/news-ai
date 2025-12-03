@@ -85,28 +85,11 @@ export default async function NewsPage({ params }: PageProps) {
                 {article.description}
               </p>
               <div className="space-y-6">
-                {/* Simulating long content since mock data is short */}
-                <p>{article.content}</p>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                  laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                  irure dolor in reprehenderit in voluptate velit esse cillum
-                  dolore eu fugiat nulla pariatur.
-                </p>
-                <h3>Key Takeaways</h3>
-                <ul>
-                  <li>Detailed analysis of the current situation.</li>
-                  <li>Expert opinions and future projections.</li>
-                  <li>Impact on the global landscape.</li>
-                </ul>
-                <p>
-                  Excepteur sint occaecat cupidatat non proident, sunt in culpa
-                  qui officia deserunt mollit anim id est laborum. Sed ut
-                  perspiciatis unde omnis iste natus error sit voluptatem
-                  accusantium doloremque laudantium.
-                </p>
+                {article.content.split("\n\n").map((paragraph, index) => (
+                  <p key={index} className="whitespace-pre-line">
+                    {paragraph}
+                  </p>
+                ))}
               </div>
             </div>
           </article>
