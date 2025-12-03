@@ -8,6 +8,7 @@ import { NewsCard } from "@/components/NewsCard";
 import { Pagination } from "@/components/Pagination";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useNewsStore } from "@/store/newsStore";
+import { Newsletter } from "@/components/Newsletter";
 
 const ITEMS_PER_PAGE = 6;
 
@@ -46,7 +47,7 @@ export default function Home() {
   );
 
   return (
-    <div className="pb-20">
+    <div>
       {/* Hero Section */}
       <section className="relative py-16 md:py-24 bg-linear-to-b from-background to-secondary/20 border-b border-border">
         <Container>
@@ -122,6 +123,8 @@ export default function Home() {
           </div>
         </Container>
       </section>
+
+      <Newsletter />
     </div>
   );
 }

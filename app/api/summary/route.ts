@@ -8,18 +8,53 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Text is required" }, { status: 400 });
     }
 
-    // Simulate AI processing delay
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    const apiKey = process.env.GEMINI_API_KEY;
 
-    // Mock AI summary generation
-    // In a real app, this would call OpenAI, Gemini, or HuggingFace API
-    const summary = `Here is a concise summary of the article:
+    if (apiKey) {
+      try {
+        const response = await fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              contents: [
+                {
+                  parts: [
+                    {
+                      text: `Summarize the following news article into 3–4 clear, concise sentences:\n\n${text}`,
+                    },
+                  ],
+                },
+              ],
+            }),
+          }
+        );
 
-The article discusses the significant impact of the reported events, highlighting key developments in the sector. It emphasizes the main points raised by experts and outlines potential future implications. The narrative is driven by recent data and expert analysis, suggesting a shift in current trends. Overall, the piece provides a comprehensive overview of the situation.`;
+        if (!response.ok) {
+          throw new Error(`Gemini API error: ${response.status}`);
+        }
 
-    return NextResponse.json({ summary });
+        const data = await response.json();
+        const summary = data.candidates?.[0]?.content?.parts?.[0]?.text;
+
+        if (summary) {
+          return NextResponse.json({ summary });
+        }
+      } catch (apiError) {
+        console.error("Gemini API failed:", apiError);
+      }
+    }
+
+    // Fallback mock summary
+    await new Promise((resolve) => setTimeout(resolve, 800));
+
+    return NextResponse.json({
+      summary:
+        "(Mock Summary) The article highlights key developments and their broader implications, providing context and expert viewpoints. It outlines the main events, related impacts, and possible future outcomes. Overall, it delivers a concise overview of the topic.",
+    });
   } catch (error) {
-    console.error("Summary generation error:", error);
+    console.error("Error:", error);
     return NextResponse.json(
       { error: "Failed to generate summary" },
       { status: 500 }
